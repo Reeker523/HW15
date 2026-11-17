@@ -1,58 +1,81 @@
 package org.skypro.skyshop;
 
-import org.skypro.skyshop.product.Product;
-import org.skypro.skyshop.product.SimpleProduct;
-import org.skypro.skyshop.product.DiscountedProduct;
-import org.skypro.skyshop.product.FixPriceProduct;
+import org.skypro.skyshop.product.*;
 import org.skypro.skyshop.basket.ProductBasket;
+import org.skypro.skyshop.article.Article;
+import org.skypro.skyshop.search.SearchEngine;
+import org.skypro.skyshop.search.Searchable;
+
+import java.util.Arrays;
 
 public class App {
     public static void main(String[] args) {
 
+        // Создание товаров
         Product product1 = new SimpleProduct("Хлеб", 50);
         Product product2 = new SimpleProduct("Молоко", 90);
         Product product3 = new DiscountedProduct("Сыр", 250, 20);
         Product product4 = new DiscountedProduct("Яблоки", 120, 10);
         Product product5 = new FixPriceProduct("Сок");
 
+        // Создание корзины
         ProductBasket basket = new ProductBasket();
 
-        // Добавление товаров
         basket.addProduct(product1);
         basket.addProduct(product2);
         basket.addProduct(product3);
         basket.addProduct(product4);
         basket.addProduct(product5);
 
-        // Попытка добавить шестой товар
-        basket.addProduct(new SimpleProduct("Шоколад", 80));
-
-        // Печать корзины
-        System.out.println("Содержимое корзины:");
+        System.out.println("Корзина:");
         basket.printBasket();
 
-        // Общая стоимость
-        System.out.println("\nСтоимость корзины: "
-                + basket.getTotalPrice());
+        // Создание статей
+        Article article1 = new Article(
+                "Хлеб",
+                "Полезная информация о хлебе"
+        );
 
-        // Поиск товара
-        System.out.println("Поиск хлеба: "
-                + basket.containsProduct("Хлеб"));
+        Article article2 = new Article(
+                "Молоко",
+                "Виды и польза молока"
+        );
 
-        System.out.println("Поиск чая: "
-                + basket.containsProduct("Чай"));
+        Article article3 = new Article(
+                "Сыр",
+                "Как правильно выбирать сыр"
+        );
 
-        // Очистка корзины
-        basket.clearBasket();
+        // Создание поискового движка
+        SearchEngine searchEngine = new SearchEngine(20);
 
-        // Проверка пустой корзины
-        System.out.println("\nПосле очистки:");
-        basket.printBasket();
+        // Добавление товаров
+        searchEngine.add(product1);
+        searchEngine.add(product2);
+        searchEngine.add(product3);
+        searchEngine.add(product4);
+        searchEngine.add(product5);
 
-        System.out.println("Стоимость: "
-                + basket.getTotalPrice());
+        // Добавление статей
+        searchEngine.add(article1);
+        searchEngine.add(article2);
+        searchEngine.add(article3);
 
-        System.out.println("Поиск хлеба: "
-                + basket.containsProduct("Хлеб"));
+        // Поиск
+        System.out.println("\nПоиск хлеба:");
+        Searchable[] result1 = searchEngine.search("Хлеб");
+        System.out.println(Arrays.toString(result1));
+
+        System.out.println("\nПоиск молока:");
+        Searchable[] result2 = searchEngine.search("Молоко");
+        System.out.println(Arrays.toString(result2));
+
+        System.out.println("\nПоиск сыра:");
+        Searchable[] result3 = searchEngine.search("Сыр");
+        System.out.println(Arrays.toString(result3));
+
+        System.out.println("\nПоиск отсутствующего товара:");
+        Searchable[] result4 = searchEngine.search("Телефон");
+        System.out.println(Arrays.toString(result4));
     }
 }
