@@ -1,21 +1,19 @@
 package org.skypro.skyshop;
 
+import org.skypro.skyshop.basket.basket;
 import org.skypro.skyshop.product.Product;
-import org.skypro.skyshop.product.SimpleProduct;
-import org.skypro.skyshop.product.DiscountedProduct;
-import org.skypro.skyshop.product.FixPriceProduct;
-import org.skypro.skyshop.basket.ProductBasket;
 
 public class App {
     public static void main(String[] args) {
 
-        Product product1 = new SimpleProduct("Хлеб", 50);
-        Product product2 = new SimpleProduct("Молоко", 90);
-        Product product3 = new DiscountedProduct("Сыр", 250, 20);
-        Product product4 = new DiscountedProduct("Яблоки", 120, 10);
-        Product product5 = new FixPriceProduct("Сок");
+        Product product1 = new Product("Хлеб", 50);
+        Product product2 = new Product("Молоко", 90);
+        Product product3 = new Product("Сыр", 250);
+        Product product4 = new Product("Яблоки", 120);
+        Product product5 = new Product("Сок", 100);
+        Product product6 = new Product("Шоколад", 80);
 
-        ProductBasket basket = new ProductBasket();
+        basket basket = new basket();
 
         // Добавление товаров
         basket.addProduct(product1);
@@ -25,34 +23,30 @@ public class App {
         basket.addProduct(product5);
 
         // Попытка добавить шестой товар
-        basket.addProduct(new SimpleProduct("Шоколад", 80));
+        basket.addProduct(product6);
 
         // Печать корзины
-        System.out.println("Содержимое корзины:");
         basket.printBasket();
 
-        // Общая стоимость
-        System.out.println("\nСтоимость корзины: "
-                + basket.getTotalPrice());
+        // Стоимость корзины
+        System.out.println("Стоимость: " + basket.getTotalPrice());
 
-        // Поиск товара
-        System.out.println("Поиск хлеба: "
-                + basket.containsProduct("Хлеб"));
+        // Поиск существующего товара
+        System.out.println("Хлеб: " + basket.containsProduct("Хлеб"));
 
-        System.out.println("Поиск чая: "
-                + basket.containsProduct("Чай"));
+        // Поиск отсутствующего товара
+        System.out.println("Чай: " + basket.containsProduct("Чай"));
 
         // Очистка корзины
         basket.clearBasket();
 
-        // Проверка пустой корзины
-        System.out.println("\nПосле очистки:");
+        // Печать пустой корзины
         basket.printBasket();
 
-        System.out.println("Стоимость: "
-                + basket.getTotalPrice());
+        // Стоимость пустой корзины
+        System.out.println("Стоимость: " + basket.getTotalPrice());
 
-        System.out.println("Поиск хлеба: "
-                + basket.containsProduct("Хлеб"));
+        // Поиск в пустой корзине
+        System.out.println("Хлеб: " + basket.containsProduct("Хлеб"));
     }
 }
