@@ -15,7 +15,6 @@ public class App {
 
         basket basket = new basket();
 
-        // Добавление товаров
         basket.addProduct(product1);
         basket.addProduct(product2);
         basket.addProduct(product3);
@@ -37,8 +36,8 @@ public class App {
         // Поиск отсутствующего товара
         System.out.println("Чай: " + basket.containsProduct("Чай"));
 
-        // Очистка корзины
-        basket.clearBasket();
+        // Создание поискового движка
+        SearchEngine searchEngine = new SearchEngine(20);
 
         // Печать пустой корзины
         basket.printBasket();
