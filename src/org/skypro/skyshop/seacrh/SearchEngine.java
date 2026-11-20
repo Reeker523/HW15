@@ -1,38 +1,68 @@
 package org.skypro.skyshop.search;
 
-public class SearchEngine {
-    private final Searchable[] searchableItems;
+import java.util.ArrayList;
+import java.util.List;
 
-    public SearchEngine(int size) {
-        searchableItems = new Searchable[size];
-    }
+public class SearchEngine {
+    private final List<Searchable> searchableItems = new ArrayList<>();
 
     public void add(Searchable item) {
-        for (int i = 0; i < searchableItems.length; i++) {
-            if (searchableItems[i] == null) {
-                searchableItems[i] = item;
-                return;
-            }
+        if (item == null) {
+            throw new IllegalArgumentException("Элемент не может быть null");
         }
+
+        searchableItems.add(item);
     }
 
-    public Searchable[] search(String searchTerm) {
-        Searchable[] results = new Searchable[5];
-        int count = 0;
+    public List<Searchable> search(String searchTerm) {
+        List<Searchable> results = new ArrayList<>();
+
+        if (searchTerm == null || searchTerm.isBlank()) {
+            return results;
+        }
 
         for (Searchable item : searchableItems) {
-            if (item != null &&
-                    item.getSearchTerm().contains(searchTerm)) {
-
-                results[count] = item;
-                count++;
-
-                if (count == 5) {
-                    break;
-                }
+            if (item.getSearchTerm().toLowerCase()
+                    .contains(searchTerm.toLowerCase())) {
+                results.add(item);
             }
         }
 
         return results;
+    }
+
+    public Searchable searchMostSuitable(String searchTerm)
+            throws BestResultNotFound {
+
+        Searchable bestResult = null;
+        int maxMatches = 0;
+
+        if (searchTerm == null || searchTerm.isBlank()) {
+            throw new BestResultNotFound("Поисковый запрос пуст");
+        }
+
+        for (Searchable item : searchableItems) {
+            String text = item.getSearchTerm().toLowerCase();
+            String query = searchTerm.toLowerCase();
+
+            int matches = 0;
+            int index = 0;
+
+            while ((index = text.indexOf(query, index)) != -1) {
+                matches++;
+                index += query.length();
+            }
+
+            if (matches > maxMatches) {
+                maxMatches = matches;
+                bestResult = item;
+            }
+        }
+
+        if (bestResult == null) {
+            throw new BestResultNotFound("Подходящий результат не найден");
+        }
+
+        return bestResult;
     }
 }

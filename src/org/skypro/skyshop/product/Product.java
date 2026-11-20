@@ -4,27 +4,24 @@ import org.skypro.skyshop.search.Searchable;
 
 public abstract class Product implements Searchable {
     private final String name;
-    private final int price;
 
-    public Product(String name, int price) {
+    public Product(String name) {
+        if (name == null || name.isBlank()) {
+            throw new IllegalArgumentException(
+                    "Название товара не может быть пустым"
+            );
+        }
+
         this.name = name;
-        this.price = price;
     }
 
     public String getName() {
         return name;
     }
 
-    public int getPrice() {
-        return price;
-    }
-}
     public abstract int getPrice();
 
     public abstract boolean isSpecial();
-
-    @Override
-    public abstract String toString();
 
     @Override
     public String getSearchTerm() {
@@ -34,5 +31,15 @@ public abstract class Product implements Searchable {
     @Override
     public String getContentType() {
         return "PRODUCT";
+    }
+
+    @Override
+    public String getStringRepresentation() {
+        return name + " (PRODUCT)";
+    }
+
+    @Override
+    public String toString() {
+        return name + " — " + getPrice() + " руб.";
     }
 }

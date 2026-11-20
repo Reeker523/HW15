@@ -7,26 +7,21 @@ public class Article implements Searchable {
     private final String text;
 
     public Article(String title, String text) {
+        if (title == null || title.isBlank()) {
+            throw new IllegalArgumentException("Название статьи не может быть пустым");
+        }
+
+        if (text == null || text.isBlank()) {
+            throw new IllegalArgumentException("Текст статьи не может быть пустым");
+        }
+
         this.title = title;
         this.text = text;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    @Override
-    public String toString() {
-        return title + "\n" + text;
-    }
-
     @Override
     public String getSearchTerm() {
-        return toString();
+        return title + " " + text;
     }
 
     @Override
@@ -37,5 +32,15 @@ public class Article implements Searchable {
     @Override
     public String getName() {
         return title;
+    }
+
+    @Override
+    public String getStringRepresentation() {
+        return title + " (" + getContentType() + ")";
+    }
+
+    @Override
+    public String toString() {
+        return title + ": " + text;
     }
 }
