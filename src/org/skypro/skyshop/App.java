@@ -11,6 +11,7 @@ import org.skypro.skyshop.search.SearchEngine;
 import org.skypro.skyshop.search.Searchable;
 
 import java.util.List;
+import java.util.Map;
 
 public class App {
 
@@ -30,13 +31,21 @@ public class App {
         basket.addProduct(phone);
         basket.addProduct(headphones);
 
-        System.out.println("Корзина до удаления:");
+        // Добавляем ещё один товар с таким же именем
+        basket.addProduct(new SimpleProduct("Молоко", 120));
+
+        System.out.println("Корзина:");
         basket.printBasket();
 
-        // Удаление существующего товара
-        System.out.println("\nУдаление товара «Молоко»:");
+        // Проверка наличия товара
+        System.out.println("\nЕсть ли молоко: "
+                + basket.containsProduct("Молоко"));
 
-        List<Product> removedProducts = basket.removeProduct("Молоко");
+        // Удаление товара
+        System.out.println("\nУдаление молока:");
+
+        List<Product> removedProducts =
+                basket.removeProduct("Молоко");
 
         if (removedProducts.isEmpty()) {
             System.out.println("Список пуст");
@@ -50,30 +59,24 @@ public class App {
         basket.printBasket();
 
         // Удаление несуществующего товара
-        System.out.println("\nУдаление товара «Компьютер»:");
+        System.out.println("\nУдаление компьютера:");
 
-        List<Product> notRemoved = basket.removeProduct("Компьютер");
+        List<Product> notRemoved =
+                basket.removeProduct("Компьютер");
 
         if (notRemoved.isEmpty()) {
             System.out.println("Список пуст");
-        } else {
-            for (Product product : notRemoved) {
-                System.out.println(product);
-            }
         }
-
-        System.out.println("\nКорзина после повторного удаления:");
-        basket.printBasket();
 
         // Создание статей
         Article article1 = new Article(
-                "Молоко",
-                "Полезный молочный продукт"
+                "Молочные продукты",
+                "Информация о молоке и других продуктах"
         );
 
         Article article2 = new Article(
                 "Хлеб",
-                "Свежий хлеб из пекарни"
+                "Информация о хлебе"
         );
 
         Article article3 = new Article(
@@ -81,7 +84,7 @@ public class App {
                 "Обзор современных телефонов"
         );
 
-        // Создание поисковой системы
+        // Создание поискового движка
         SearchEngine searchEngine = new SearchEngine();
 
         searchEngine.add(milk);
@@ -93,27 +96,32 @@ public class App {
         searchEngine.add(article2);
         searchEngine.add(article3);
 
-        // Поиск всех результатов
+        // Поиск
         System.out.println("\nРезультаты поиска по запросу «Молоко»:");
 
-        List<Searchable> results = searchEngine.search("Молоко");
+        Map<String, Searchable> results =
+                searchEngine.search("Молоко");
 
         if (results.isEmpty()) {
             System.out.println("Ничего не найдено");
         } else {
-            for (Searchable result : results) {
-                System.out.println(result.getStringRepresentation());
+            for (Searchable result : results.values()) {
+                System.out.println(
+                        result.getStringRepresentation()
+                );
             }
         }
 
-        // Поиск наиболее подходящего результата
+        // Самый подходящий результат
         System.out.println("\nСамый подходящий результат:");
 
         try {
             Searchable bestResult =
                     searchEngine.searchMostSuitable("Хлеб");
 
-            System.out.println(bestResult.getStringRepresentation());
+            System.out.println(
+                    bestResult.getStringRepresentation()
+            );
 
         } catch (BestResultNotFound e) {
             System.out.println(e.getMessage());
